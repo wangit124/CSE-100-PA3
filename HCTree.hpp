@@ -1,3 +1,11 @@
+/* Description: This is a program that defines the trie
+ *
+ * Name: Luhao Wang
+ * Email: luw055@ucsd.edu
+ * Date: May 12, 2019
+ * Sources: Piazza
+ */
+
 #ifndef HCTREE_HPP
 #define HCTREE_HPP
 
