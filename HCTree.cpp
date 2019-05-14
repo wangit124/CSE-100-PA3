@@ -49,7 +49,7 @@ void HCTree::build(const vector<int> & freqs)
 
 		// Create new root
 		int newCount = min1->count + min2->count;
-		HCNode * newRoot = new HCNode(newCount, min2->symbol);
+		HCNode * newRoot = new HCNode(newCount, min1->symbol);
 
 		// Link nodes
 		min1->p = newRoot;
@@ -76,6 +76,12 @@ void HCTree::encode(byte symbol, ofstream& out) const
 {
 	// Get the correct leaf
 	HCNode * curr = leaves[(int)symbol];
+
+	// If current node is root, write 0 and return
+	if (curr == root) {
+		out << to_string(0);
+		return;
+	}
 
 	// If frequency is 0, don't encode
 	if (curr->count == 0) {
@@ -108,10 +114,10 @@ void HCTree::encode(byte symbol, ofstream& out) const
 	// Get size of encoding
 	int size = (signed int)encoding.size();
 	for (int i = size-1; i>=0; i--) {
-		output += to_string(encoding[i]); 
+		output += to_string(encoding[i]);
 	}
-	
-	// write output to stream
+
+	// Write to output
 	out << output;
 }
 
@@ -147,6 +153,9 @@ int HCTree::decode(ifstream& in) const
 		if (!(curr->c0) && !(curr->c1)) {
 			return (int)(curr->symbol);
 		}
+
+		// read next character
+		currSymb = in.get();
 	}
 
 	// If file empty, return EOF

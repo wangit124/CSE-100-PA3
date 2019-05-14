@@ -66,6 +66,8 @@ int main (int argc, char ** argv) {
 		cout << temp << endl;
 	}
 
+	
+	cout << in.get() << endl;
 	// Decode the input file and write each character to output
 	currSymb = in.get();
 	while (currSymb != -1) {

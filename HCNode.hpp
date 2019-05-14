@@ -48,7 +48,7 @@ public:
             return this->count > other.count;
         }
         // counts are equal. use symbol value to break tie.
-        return this->symbol > other.symbol;
+        return this->symbol < other.symbol;
     }
 };
 
