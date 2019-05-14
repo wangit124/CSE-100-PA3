@@ -23,8 +23,7 @@ using namespace std;
  * right and parent nodes.
  */
 class HCNode {
-    friend bool comp(HCNode* one, HCNode* other);
-
+//    friend bool comp(HCNode* one, HCNode* other)
 public:
     int count;
     byte symbol; // byte in the file we're keeping track of
@@ -49,7 +48,7 @@ public:
             return this->count > other.count;
         }
         // counts are equal. use symbol value to break tie.
-        return this->symbol < other.symbol;
+        return this->symbol > other.symbol;
     }
 };
 
@@ -62,7 +61,7 @@ ostream& operator<<(ostream& stm, const HCNode& n) {
     return stm;
 }
 
-bool comp(HCNode* one, HCNode* other);
+//bool comp(HCNode* one, HCNode* other);
 
 
 #endif // HCNODE_HPP

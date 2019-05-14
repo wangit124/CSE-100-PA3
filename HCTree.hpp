@@ -19,6 +19,8 @@
 //#include "BitInputStream.hpp"
 //#include "BitOutputStream.hpp"
 
+#define ASCII 256
+
 using namespace std;
 
 /** A 'function class' for use as the Compare class in a
@@ -47,7 +49,7 @@ private:
 	
 public:
     explicit HCTree() : root(0) {
-        leaves = vector<HCNode*>(256, (HCNode*) 0);
+        leaves = vector<HCNode*>(ASCII, (HCNode*) 0);
     }
 
     ~HCTree();
