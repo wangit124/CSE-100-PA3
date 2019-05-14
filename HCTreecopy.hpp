@@ -58,7 +58,7 @@ public:
      *  POSTCONDITION:  root points to the root of the trie,
      *  and leaves[i] points to the leaf node containing byte i.
      */
-    void build(const vector<int>& freqs);
+    void build(const std::vector<int>& freqs);
 
 	/* Delete method deletes all allocated memory for each node
 	 */

@@ -1,4 +1,7 @@
-/* Description: This is a program that defines the trie
+/* Description: This is a program that defines a node in the 
+ * huffman tree. The node stores the letter and count
+ * of each character we are encoding, and is used to
+ * build up a huffman tree structure.
  *
  * Name: Luhao Wang
  * Email: luw055@ucsd.edu
@@ -15,7 +18,9 @@ typedef unsigned char byte;
 
 using namespace std;
 
-/** A class, instances of which are nodes in an HCTree.
+/** A class, instances of which are nodes in an HCTree. 
+ * Member variables store the character, count, left,
+ * right and parent nodes.
  */
 class HCNode {
     friend bool comp(HCNode* one, HCNode* other);
@@ -51,7 +56,7 @@ public:
 /** For printing an HCNode to an ostream
  *  Possibly useful for debugging.
  */
-ostream& operator<<(ostream&, const HCNode&) __attribute__((weak)); // shut the linker up
+ostream& operator<<(ostream&, const HCNode&) __attribute__((weak)); 
 ostream& operator<<(ostream& stm, const HCNode& n) {
     stm << "[" << n.count << "," << (int) (n.symbol) << "]";
     return stm;
