@@ -9,6 +9,7 @@
 
 #include "HCTree.hpp"
 #include <fstream>
+#include <sstream>
 
 #define ASCII 256
 #define ARG1 1
@@ -40,6 +41,8 @@ int main (int argc, char ** argv) {
 	// Check if file exists
 	if (!in) {
 		cout << "Invalid input file. Please try again." << endl;
+		in.close();
+		out.close();
 		exit(-1);
 	}
 
@@ -51,6 +54,7 @@ int main (int argc, char ** argv) {
 
 	// If file is empty, return -1
 	if (currSymb == -1) { 
+		in.close();
 		out.close();
 		exit(-1);
 	}
@@ -58,21 +62,38 @@ int main (int argc, char ** argv) {
 	// reopen file
 	in.close();
     in.open(inputFile, ios::binary);
-	std::string temp ="";
+	
+	// Create vector to store frequencies
+	vector <int> freqs (ASCII, 0);
 
-	// Skip to last line
+	// Build tree from frequencies
+	std::string temp = "";
+	int tempInt = 0;
+
 	for (int i=0; i<ASCII; i++) {
+		// Read line and convert to string
 		getline(in, temp);
-		cout << temp << endl;
+		stringstream convert(temp);
+		convert >> tempInt;
+
+		// Set frequency
+		freqs[i] = tempInt;
 	}
+	
+	// Build tree
+	myTree->build(freqs);
 
 	// Decode the input file and write each character to output
-	currSymb = in.get();
-	while (currSymb != -1) {
+	while (1) {
 		int currChar = myTree->decode(in);
 		
+		// If currChar is EOF, break
+		if (currChar == -1) {
+			break;
+		}
+
 		// write to output
-		out << currChar;
+		out << (char)currChar;
 	}
 
 	// Close input and output

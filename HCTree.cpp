@@ -137,13 +137,17 @@ int HCTree::decode(ifstream& in) const
 	char currSymb = in.get();
 
 	// while good, keep reading
-	while (currSymb != -1) {
+	while (currSymb != -1 && curr != nullptr) {
 		// Traverse 0 or 1
 		if (currSymb == LEFT) {
-			curr = curr->c0;
+			if (curr->c0 != nullptr) {
+				curr = curr->c0;
+			}
 		}
 		else if (currSymb == RIGHT) {
-			curr = curr->c1;
+			if (curr->c1 != nullptr) {
+				curr = curr->c1;
+			}
 		}
 		else {
 			continue;
