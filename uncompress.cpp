@@ -97,7 +97,7 @@ int main (int argc, char ** argv) {
 		}
 
 		// write to output
-		out << to_string(currChar);
+		out << (unsigned char)currChar;
 	}
 
 	// Close input and output

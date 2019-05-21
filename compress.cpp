@@ -36,9 +36,14 @@ int main (int argc, char ** argv) {
 	ifstream in;
     in.open(inputFile, ios::binary);
 	
+	// Open outstream
+	ofstream out;
+	out.open(outputFile, ios::binary);
+		
 	// Check if file exists
 	if (!in) {
 		cout << "Invalid input file. Please try again." << endl;
+		out.close();
 		in.close();
 		exit(-1);
 	}
@@ -49,8 +54,9 @@ int main (int argc, char ** argv) {
 	int currFreq;
 
 	// If file is empty, return -1
-	if (currSymb == -1) { 
+	if (currSymb == EOF) { 
 		// Open outstream
+		out.close();
 		in.close();
 		exit(-1);
 	}
@@ -79,10 +85,6 @@ int main (int argc, char ** argv) {
 	in.close();
     in.open(inputFile, ios::binary);
 
-	// Open outstream
-	ofstream out;
-	out.open(outputFile, ios::binary);
-	
 	// Write header
 	for (unsigned int i=0; i<freqs.size(); i++) {
 		out << freqs[i] << endl;
