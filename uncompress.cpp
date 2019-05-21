@@ -47,17 +47,18 @@ int main (int argc, char ** argv) {
 	}
 
 	// Check if file is empty
-	char currSymb = in.get();
-
-	// Create new HCTree and build from array of freqs
-	HCTree * myTree = new HCTree();
-
+	unsigned char nextChar;
+	int currSymb = in.get();
+	
 	// If file is empty, return -1
 	if (currSymb == -1) { 
 		in.close();
 		out.close();
 		exit(-1);
 	}
+
+	// Create new HCTree and build from array of freqs
+	HCTree * myTree = new HCTree();
 
 	// reopen file
 	in.close();
@@ -71,7 +72,7 @@ int main (int argc, char ** argv) {
 	int tempInt = 0;
 
 	for (int i=0; i<ASCII; i++) {
-		// Read line and convert to string
+		// Read line and convert to int
 		getline(in, temp);
 		stringstream convert(temp);
 		convert >> tempInt;
@@ -82,18 +83,21 @@ int main (int argc, char ** argv) {
 	
 	// Build tree
 	myTree->build(freqs);
+	
+	// Temp variable to store return value
+	int currChar;
 
 	// Decode the input file and write each character to output
 	while (1) {
-		int currChar = myTree->decode(in);
+		currChar = myTree->decode(in);
 		
 		// If currChar is EOF, break
-		if (currChar == -1) {
+		if (currChar == EOF) {
 			break;
 		}
 
 		// write to output
-		out << (char)currChar;
+		out << to_string(currChar);
 	}
 
 	// Close input and output

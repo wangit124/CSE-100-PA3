@@ -36,60 +36,69 @@ int main (int argc, char ** argv) {
 	ifstream in;
     in.open(inputFile, ios::binary);
 	
-	// Open outstream
-	ofstream out;
-	out.open(outputFile, ios::binary);
-	
 	// Check if file exists
 	if (!in) {
 		cout << "Invalid input file. Please try again." << endl;
 		in.close();
-		out.close();
 		exit(-1);
 	}
 
 	// Read file character by character and calculate frequencies
-	char currSymb = in.get();
+	unsigned char nextChar;
+	int currSymb = in.get();
+	int currFreq;
 
 	// If file is empty, return -1
 	if (currSymb == -1) { 
 		// Open outstream
 		in.close();
-		out.close();
 		exit(-1);
 	}
-	
-	while (currSymb != -1) {
-		// Increment count of ascii position
-		int currFreq = freqs[(int)currSymb];
-		currFreq++;
-		freqs[(int)currSymb] = currFreq;
+	else {
+		nextChar = (unsigned char) currSymb;
+		currSymb = (int) nextChar;
 		
-		// Read next character
-		currSymb = in.get();
+		// Increment frequency 
+		currFreq = freqs[currSymb];
+		currFreq = currFreq + 1;
+		freqs[currSymb] = currFreq;
 	}
-	
-	// Create new HCTree and build from array of freqs
-	HCTree * myTree = new HCTree();
-	myTree->build(freqs);
+
+	// Keep reading while not EOF
+	while ((currSymb = in.get()) != EOF) {
+		nextChar = (unsigned char) currSymb;
+		currSymb = (int) nextChar;
+		
+		// Increment frequency 
+		currFreq = freqs[currSymb];
+		currFreq = currFreq + 1;
+		freqs[currSymb] = currFreq;// Increment count of ascii position
+	}
 
 	// Close input file and read again
 	in.close();
     in.open(inputFile, ios::binary);
 
+	// Open outstream
+	ofstream out;
+	out.open(outputFile, ios::binary);
+	
 	// Write header
 	for (unsigned int i=0; i<freqs.size(); i++) {
 		out << freqs[i] << endl;
 	}
 
-	// Read file character by character and encode
-	currSymb = in.get();
-	while (currSymb != -1) {
-		// Encode symbol
-		myTree->encode(currSymb, out);
+	// Create new HCTree and build from array of freqs
+	HCTree * myTree = new HCTree();
+	myTree->build(freqs);
 
-		// Read next character
-		currSymb = in.get();
+	// Keep reading while not EOF and encode
+	while ((currSymb = in.get()) != EOF) {
+		// Convert read to byte
+		nextChar = (unsigned char) currSymb;
+
+		// encode
+		myTree->encode(currSymb, out);
 	}
 	
 	// Close input and output files

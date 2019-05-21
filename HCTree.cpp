@@ -92,16 +92,21 @@ void HCTree::encode(byte symbol, ofstream& out) const
 	vector<int> encoding;
 
 	// Traverse up the tree and build up bitstring
-	while (curr->p) {
+	while (curr != root) {
 		// Check if 0 or 1
-		if ((curr->p->c0) == curr) {
-			encoding.push_back(0);
+		if ((curr->p->c0) && (curr->p->c1)) {
+			if ((curr->p->c0) == curr) { 
+				encoding.push_back(0);
+			}
+			else {
+				encoding.push_back(1);
+			}
 		}
-		else if (curr->p->c1 == curr) {
+		else if (curr->p->c1) {
 			encoding.push_back(1);
 		}
 		else {
-			break;
+			encoding.push_back(0);
 		}
 
 		// Traverse up
@@ -112,10 +117,14 @@ void HCTree::encode(byte symbol, ofstream& out) const
 	std::string output = "";
 
 	// Get size of encoding
-	int size = (signed int)encoding.size();
-	for (int i = size-1; i>=0; i--) {
+	unsigned int size = encoding.size();
+
+	for (unsigned int i = size-1; i>0; i--) {
 		output += to_string(encoding[i]);
 	}
+	
+	// Write last byte
+	output += to_string(encoding[0]);
 
 	// Write to output
 	out << output;
@@ -134,17 +143,21 @@ int HCTree::decode(ifstream& in) const
 	HCNode * curr = root;
 
 	// Get first character from input
-	char currSymb = in.get();
+	unsigned char nextChar;
+	int currSymb;
 
 	// while good, keep reading
-	while (currSymb != -1 && curr != nullptr) {
+	while ((currSymb = in.get()) != EOF && curr != nullptr) {
+		// Convert to char
+		nextChar = (unsigned char) currSymb;
+
 		// Traverse 0 or 1
-		if (currSymb == LEFT) {
+		if (nextChar == LEFT) {
 			if (curr->c0 != nullptr) {
 				curr = curr->c0;
 			}
 		}
-		else if (currSymb == RIGHT) {
+		else if (nextChar == RIGHT) {
 			if (curr->c1 != nullptr) {
 				curr = curr->c1;
 			}
@@ -157,13 +170,10 @@ int HCTree::decode(ifstream& in) const
 		if (!(curr->c0) && !(curr->c1)) {
 			return (int)(curr->symbol);
 		}
-
-		// read next character
-		currSymb = in.get();
 	}
 
 	// If file empty, return EOF
-	return int(currSymb);
+	return currSymb;
 }
 
 /* Destructor for HCTree, deletes all nodes allocated on heap*/
